@@ -1,0 +1,320 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #chat-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 100%;
+      max-width: 500px;
+      height: 300px;
+      overflow-y: auto;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #3f8cfe;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #3578d1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chat with AI Assistant</h1>
+  <div id="chat-box"></div>
+  <input type="text" id="user-input" placeholder="Type your message..." />
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    async function sendMessage() {
+      const userInput = document.getElementById('user-input').value;
+      if (!userInput) return;
+
+      const chatBox = document.getElementById('chat-box');
+      chatBox.innerHTML += `<div><b>You:</b> ${userInput}</div>`;
+      
+      // Send user input to backend
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userInput })
+      });
+
+      const data = await response.json();
+      chatBox.innerHTML += `<div><b>Assistant:</b> ${data.response}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the bottom
+      document.getElementById('user-input').value = '';
+    }
+  </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wehouse Assistant</title>
+    <style>
+        :root {
+            --primary-color: #F7A41E;
+            --secondary-color: #4A5568;
+            --message-user-bg: #FEF3E1;
+            --text-color: #2D3748;
+            --background-color: #FFFFFF;
+            --border-color: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .chat-container {
+            width: 95%;
+            max-width: 900px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+        }
+
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.8em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .chat-header img {
+            height: 30px;
+            width: auto;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #FAFAFA;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            max-width: 80%;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+            line-height: 1.5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            margin-left: auto;
+            background-color: var(--message-user-bg);
+            color: var(--text-color);
+            text-align: right;
+            border: 1px solid var(--primary-color);
+        }
+
+        .message.bot {
+            margin-right: auto;
+            background-color: #ffffff;
+            color: var(--text-color);
+            text-align: left;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .bot-icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            line-height: 30px;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+
+        .input-container {
+            display: flex;
+            padding: 15px;
+            background-color: #ffffff;
+            border-top: 1px solid var(--border-color);
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 1em;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            outline: none;
+            resize: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #userInput:focus {
+            border-color: var(--primary-color);
+        }
+
+        #sendBtn {
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 1em;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        #sendBtn:hover {
+            background-color: #E69109;
+            transform: translateY(-1px);
+        }
+
+        #sendBtn:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chatHeader" class="chat-header">
+            <span>Wehouse Assistant</span>
+        </div>
+        
+        <div id="chatMessages" class="chat-messages"></div>
+
+        <div class="input-container">
+            <textarea id="userInput" placeholder="Type your message here..." rows="1"></textarea>
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const sendBtn = document.getElementById('sendBtn');
+        const userInput = document.getElementById('userInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        function appendMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+
+            if (sender === 'bot') {
+                const botIcon = document.createElement('span');
+                botIcon.classList.add('bot-icon');
+                botIcon.textContent = 'W';
+                messageDiv.appendChild(botIcon);
+            }
+
+            const messageText = document.createElement('span');
+            messageText.textContent = text;
+            messageDiv.appendChild(messageText);
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage(message) {
+            if (message.trim() === '') return;
+
+            appendMessage('user', message);
+            userInput.value = '';
+            adjustTextareaHeight();
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    appendMessage('bot', data.response);
+                } else {
+                    appendMessage('bot', `Error: ${data.error}`);
+                }
+            } catch (error) {
+                appendMessage('bot', 'Sorry, something went wrong.');
+                console.error('Error:', error);
+            }
+        }
+
+        function adjustTextareaHeight() {
+            userInput.style.height = 'auto';
+            userInput.style.height = (userInput.scrollHeight) + 'px';
+        }
+
+        userInput.addEventListener('input', adjustTextareaHeight);
+
+        // Display welcome message immediately when page loads
+        window.onload = () => {
+            appendMessage('bot', 'Welcome to Wehouse! I\'m your personal assistant. How can I help you with your home construction needs today?');
+        };
+
+        sendBtn.addEventListener('click', () => {
+            const message = userInput.value;
+            sendMessage(message);
+        });
+
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const message = userInput.value;
+                sendMessage(message);
+            }
+        });
+    </script>
+</body>
+</html>
+
